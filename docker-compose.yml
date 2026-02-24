@@ -1,0 +1,40 @@
+
+version: '3.8'
+services:
+  # --- THE GEOMETRY ENGINE (GRASSHOPPER) ---
+  gh_compute:
+    image: mcneel/compute.rhino3d:v7-latest
+    isolation: process
+    ports:
+      - "6500:80" # Internal Compute Port
+    environment:
+      - RHINO_COMPUTE_API_KEY=${SECURE_HANDSHAKE_KEY:-DEFAULT_GOD_MODE_KEY_8821}
+    volumes:
+      - ./production_mods:/app/mods # Production Control Mods loaded here
+
+  # --- THE MATTER CONTROLLER & FREQUENCY ANALYZER ---
+  # This acts as the "Sidecar" to interpret real-world signals
+  matter_controller:
+    build: 
+      context: .
+      dockerfile: Dockerfile.controller
+    depends_on:
+      - gh_compute
+    ports:
+      - "8080:8080"
+    environment:
+      - COMPUTE_URL=http://gh_compute:80
+      - COMPUTE_KEY=${SECURE_HANDSHAKE_KEY:-DEFAULT_GOD_MODE_KEY_8821}
+      - SIGNAL_SOURCE=/dev/ttyUSB0 # Connection to Real World Frequency Band (SDR)
+      - MODE=GOD_MODE
+      
+  # --- AEGIS WEB CORE ---
+  aegis_core:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_ENV=PRODUCTION
+      - REACT_APP_AUTH_DOMAIN=auth.emip-enterprise.com
+    depends_on:
+      - matter_controller

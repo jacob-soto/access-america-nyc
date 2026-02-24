@@ -1,0 +1,9 @@
+{
+  "name": "Sovereign Drive Core: Aegis V6.5",
+  "description": "Advanced sovereign asset management and infrastructure control platform. Features Concurrent Sole Payout Operator for Grants.gov integration, SAM SSO identity verification, and real-time anti-fraud engineering.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
