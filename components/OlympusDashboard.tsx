@@ -442,7 +442,7 @@ const MissionPoint = ({ label, val }: any) => (
   </div>
 );
 
-const ArtifactRow = ({ name, type, status }: any) => (
+const ArtifactRowCompact = ({ name, type, status }: any) => (
   <div className="flex items-center justify-between px-6 py-3 border-b border-slate-800/50 hover:bg-slate-900/20 transition-colors group">
     <div className="flex items-center gap-3">
       <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center">

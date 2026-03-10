@@ -21,7 +21,7 @@ import {
   ExternalLink,
   Lock
 } from 'lucide-react';
-import { ACTIVE_SESSION_USER } from '../constants';
+import { useAuth } from '../auth/AuthContext';
 
 interface EntityData {
   id: string;
@@ -171,6 +171,7 @@ const INITIAL_ENTITIES: EntityData[] = [
 ];
 
 export const SAMEntityManager: React.FC = () => {
+  const { user, isRoot } = useAuth();
   const [entities, setEntities] = useState<EntityData[]>(INITIAL_ENTITIES);
   const [selectedId, setSelectedId] = useState<string | null>(entities[0].id);
 
@@ -193,6 +194,9 @@ export const SAMEntityManager: React.FC = () => {
           <div className="px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center gap-2">
             <Lock size={14} className="text-blue-400" />
             <span className="text-[10px] font-mono text-blue-400 uppercase tracking-widest font-bold">Login.gov MFA Active</span>
+          </div>
+          <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] font-mono text-white/60">
+            {user?.email ?? 'Not signed in'}{isRoot ? ' (ROOT)' : ''}
           </div>
           <button className="bg-emerald-500 hover:bg-emerald-400 text-black px-4 py-2 rounded-xl font-bold text-xs transition-all flex items-center gap-2">
             <Building2 size={16} />

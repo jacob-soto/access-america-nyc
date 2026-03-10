@@ -1,0 +1,24 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // IMPORTANT:
+    // Replace ROOT_UID with the Firebase Auth UID for your single root admin account.
+    // Keep this file in git for reference, but deploy rules via Firebase CLI.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isRoot() {
+      return isSignedIn() && request.auth.uid == 'ROOT_UID';
+    }
+
+    match /kycSubmissions/{uid} {
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow read: if isRoot() || (isSignedIn() && request.auth.uid == uid);
+      allow update: if isRoot() || (isSignedIn() && request.auth.uid == uid);
+      allow delete: if false;
+    }
+  }
+}
+

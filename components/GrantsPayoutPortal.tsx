@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   DollarSign, 
@@ -26,7 +26,9 @@ import {
   TrendingUp,
   LockKeyhole
 } from 'lucide-react';
-import { LEDGER_STREAM, ACTIVE_SESSION_USER } from '../constants';
+import { LEDGER_STREAM } from '../constants';
+import { useAuth } from '../auth/AuthContext';
+import { useKycStatus } from '../kyc/useKycStatus';
 
 // --- GRANTS & PAYOUT DATA ---
 const GRANTS_DATA = [
@@ -72,6 +74,9 @@ const PAYOUT_HISTORY = [
 ];
 
 export const GrantsPayoutPortal: React.FC = () => {
+  const { user, isRoot } = useAuth();
+  const { status: kycStatus } = useKycStatus();
+
   const [isSyncing, setIsSyncing] = useState(false);
   const [selectedGrant, setSelectedGrant] = useState<any>(null);
   const [payoutAmount, setPayoutAmount] = useState('');
@@ -88,8 +93,20 @@ export const GrantsPayoutPortal: React.FC = () => {
   const handlePayout = () => {
     if (!payoutAmount || !selectedGrant) return;
     
-    if (!ACTIVE_SESSION_USER.email.endsWith('.gov')) {
-      alert('ACCESS DENIED: Root .gov identity required for payout execution.');
+    // UX gate: require root and approved KYC for non-root users.
+    // Security must be enforced server-side (Firestore rules / callable functions).
+    if (!user) {
+      alert('ACCESS DENIED: Sign in required.');
+      return;
+    }
+
+    if (!isRoot && kycStatus !== 'approved') {
+      alert('ACCESS DENIED: Identity verification required.');
+      return;
+    }
+
+    if (!isRoot) {
+      alert('ACCESS DENIED: Root admin approval required for payout execution.');
       return;
     }
 
@@ -295,9 +312,9 @@ export const GrantsPayoutPortal: React.FC = () => {
                 <div className="space-y-4">
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center justify-between">
                     Initiate Payout
-                    {!ACTIVE_SESSION_USER.email.endsWith('.gov') && (
+                    {!isRoot && (
                       <span className="text-red-400 flex items-center gap-1">
-                        <LockKeyhole size={10} /> .GOV REQUIRED
+                        <LockKeyhole size={10} /> ROOT REQUIRED
                       </span>
                     )}
                   </label>
