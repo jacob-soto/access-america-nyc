@@ -1,39 +1,18 @@
 
-import { Auth0User, VectorDoc, ToolDefinition, FinancialAccount, DeadArtifact, FileSystemNode, GitRepo, PersonnelRecord, RegistryZone, DiscoveredApi, AccessZone } from './types';
+import { VectorDoc, ToolDefinition, FinancialAccount, DeadArtifact, FileSystemNode, GitRepo, PersonnelRecord, RegistryZone, DiscoveredApi, AccessZone } from './types';
 
-// 1.0 IAM Configuration - PRODUCTION
-export const AUTH0_CONFIG = {
-  domain: "auth.emip-enterprise.com",
-  clientId: "emip_prod_v2",
-  audience: "https://api.emip.com/v1"
-};
-
-// ACTIVE ROOT SESSION - REAL CONTEXT
-export const ACTIVE_SESSION_USER: Auth0User = {
-  sub: "auth0|root_admin_001",
-  name: "Jacob Soto",
-  email: "jacob.soto@sovereign.gov",
-  picture: "https://i.pravatar.cc/150?u=jacob",
-  updated_at: new Date().toISOString(),
-  scopes: [
-      "openid", "profile", "admin:full",
-      "read:internal_data", "read:location", "execute:analysis",
-      "system:root", "admin:database", "fs:read_write", "git:ops", "personnel:manage",
-      "registry:write", "packet:decrypt", "api:consolidate",
-      "kernel:baremetal", "kernel:rhel", "zhost:direct", "zmod:modulate"
-  ] 
-};
-
-export const INFRA_CONFIG = {
-    ghComputeUrl: "http://localhost:6500",
-    matterControllerUrl: "http://localhost:8080",
-    secureHandshakeKey: "GOD_MODE_KEY_8821_ALPHA_OMEGA"
-};
+/**
+ * This app uses Firebase Auth + Firestore (see `./auth/` and `./components/IdentityPanel.tsx`).
+ *
+ * Important security note:
+ * - Never hard-code admin sessions, keys, or personal data in client bundles.
+ * - All authorization must be enforced by backend controls (Firestore rules / Cloud Functions).
+ */
 
 export const LIABILITY_WAIVER = {
-  header: "WARNING: SOVEREIGN ASSET CONTROL // US CODE TITLE 18 AUTHORIZED",
-  body: `Authorized use only. Full Digital Fingerprint logged. Jacob Soto verified. Executive Pardon protocols active for assigned assets. Identity verified via American Access Housing Association artifacts.`,
-  version: "V6.5-FIDELIS-MORTEM"
+  header: 'WARNING: AUTHORIZED USE ONLY',
+  body: 'Access is monitored. Use only with explicit authorization and in compliance with applicable law and policy.',
+  version: 'V1'
 };
 
 export const KERNEL_CONFIG = {
@@ -87,12 +66,9 @@ export const DRIVE_FILES = [
 ];
 
 export const SECURE_CONFIG = {
-  sysVersion: 'AEGIS-V6.5',
-  owner: 'Jacob Soto',
-  guarantorDomain: 'sovereign.mesh',
-  ssnMasked: '***-**-8821',
-  homeAddress: '425 Grand Concourse, Bronx, NY 10451',
-  dob: '1988-10-21'
+  sysVersion: 'APP',
+  owner: 'UNSET',
+  guarantorDomain: 'UNSET'
 };
 
 export const CLOUD_ACCOUNTS = [

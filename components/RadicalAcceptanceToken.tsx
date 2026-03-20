@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ShieldCheck, 
@@ -17,14 +17,26 @@ import {
   AlertTriangle,
   Globe
 } from 'lucide-react';
-import { ACTIVE_SESSION_USER } from '../constants';
+import { useAuth } from '../auth/AuthContext';
+import { useKycStatus } from '../kyc/useKycStatus';
 
 export const RadicalAcceptanceToken: React.FC = () => {
+  const { user, isRoot } = useAuth();
+  const { status: kycStatus } = useKycStatus();
+
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [tokenStatus, setTokenStatus] = useState<'IDLE' | 'ACTIVE' | 'REVOKED'>('IDLE');
 
   const handleAuthenticate = () => {
+    if (!user) {
+      alert('Sign in required.');
+      return;
+    }
+    if (!isRoot && kycStatus !== 'approved') {
+      alert('Identity verification required.');
+      return;
+    }
     setIsAuthenticating(true);
     setTimeout(() => {
       setIsAuthenticating(false);
@@ -100,9 +112,9 @@ export const RadicalAcceptanceToken: React.FC = () => {
                   Identity Verification Required
                 </div>
                 <div className="text-left space-y-2">
-                  <p className="text-[10px] text-slate-500 font-mono">SUBJECT: {ACTIVE_SESSION_USER.name}</p>
+                  <p className="text-[10px] text-slate-500 font-mono">SUBJECT: {user?.displayName ?? 'Unknown'}</p>
                   <p className="text-[10px] text-slate-500 font-mono">CLEARANCE: L5-OMEGA</p>
-                  <p className="text-[10px] text-slate-500 font-mono">DOMAIN: {ACTIVE_SESSION_USER.email}</p>
+                  <p className="text-[10px] text-slate-500 font-mono">DOMAIN: {user?.email ?? 'Unknown'}</p>
                 </div>
               </div>
 

@@ -1,7 +1,6 @@
 
 import React from 'react';
 export const KnowledgeBase = () => <div className="p-8 text-white">Knowledge Base Placeholder</div>;
-export const IdentityPanel = () => <div className="p-8 text-white">Identity Panel Placeholder</div>;
 export const SystemControlPanel = () => <div className="p-8 text-white">System Control Panel Placeholder</div>;
 export const SettingsPanel = () => <div className="p-8 text-white">Settings Panel Placeholder</div>;
 export const DomainPortal = () => <div className="p-8 text-white">Domain Portal Placeholder</div>;

@@ -16,9 +16,10 @@ import { SAMEntityManager } from './components/SAMEntityManager';
 import { OlympusDashboard } from './components/OlympusDashboard';
 import TitanDashboard from './components/TitanDashboard';
 import { Zap } from 'lucide-react';
+import { IdentityPanel } from './components/IdentityPanel';
+import { AccessGate } from './components/AccessGate';
 import { 
   KnowledgeBase, 
-  IdentityPanel, 
   SystemControlPanel, 
   SettingsPanel, 
   DomainPortal, 
@@ -49,16 +50,51 @@ export default function App() {
       case AppView.LAB_MESH: return <LabIntegration />;
       case AppView.FUSION: return <FusionPortal />;
       case AppView.LEGAL: return <LegalCompliancePanel />;
-      case AppView.FCD_PORTAL: return <FCDPortal />;
-      case AppView.DLAM_CORE: return <DLAMCore />;
-      case AppView.DLAM_INSURANCE: return <DLAMInsurance />;
+      case AppView.FCD_PORTAL:
+        return (
+          <AccessGate title="FCD Portal" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <FCDPortal />
+          </AccessGate>
+        );
+      case AppView.DLAM_CORE:
+        return (
+          <AccessGate title="DLAM Core" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <DLAMCore />
+          </AccessGate>
+        );
+      case AppView.DLAM_INSURANCE:
+        return (
+          <AccessGate title="DLAM Insurance" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <DLAMInsurance />
+          </AccessGate>
+        );
       case AppView.SOVEREIGN_SEARCH: return <SovereignSearchPortal />;
       case AppView.CONCUR: return <ConcurPortal />;
       case AppView.AI_AUDIT: return <AIAuditPanel />;
-      case AppView.GRANTS_PAYOUT: return <GrantsPayoutPortal />;
-      case AppView.SAM_SSO: return <SAMSSOPanel />;
-      case AppView.RADICAL_ACCEPTANCE: return <RadicalAcceptanceToken />;
-      case AppView.SAM_ENTITY_MANAGER: return <SAMEntityManager />;
+      case AppView.GRANTS_PAYOUT:
+        return (
+          <AccessGate title="Grants & Payout" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <GrantsPayoutPortal />
+          </AccessGate>
+        );
+      case AppView.SAM_SSO:
+        return (
+          <AccessGate title="SAM SSO" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <SAMSSOPanel />
+          </AccessGate>
+        );
+      case AppView.RADICAL_ACCEPTANCE:
+        return (
+          <AccessGate title="Radical Acceptance" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <RadicalAcceptanceToken />
+          </AccessGate>
+        );
+      case AppView.SAM_ENTITY_MANAGER:
+        return (
+          <AccessGate title="Entity Manager" requireKycApproved onGoToIdentity={() => setCurrentView(AppView.IDENTITY)}>
+            <SAMEntityManager />
+          </AccessGate>
+        );
       case AppView.OLYMPUS: return <OlympusDashboard />;
       default: return <HomeDashboard />;
     }

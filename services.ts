@@ -1,7 +1,8 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.GEMINI_API_KEY;
+// Vite exposes env vars at build time via import.meta.env (prefix with VITE_).
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 
