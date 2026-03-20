@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: harness-delegate
+  namespace: access-america.org
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: harness-delegate
+  template:
+    metadata:
+      labels:
+        app: harness-delegate
+    spec:
+      containers:
+        - name: harness-delegate
+          image: harness/delegate:latest
+          env:
+            - name: HARNESS_DOMAIN
+              value: access-america.org
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      imagePullSecrets:
+        - name: harness-registry
